@@ -10,7 +10,7 @@ Get started:
         * [Random number generator](https://docs.microsoft.com/en-us/azure/quantum/quickstart-microsoft-qc)
         * [Optimization problem solver](https://docs.microsoft.com/en-us/azure/quantum/quickstart-microsoft-qio)
         * [Submit a circuit to Azure Quantum](https://docs.microsoft.com/en-us/azure/quantum/quickstart-microsoft-qiskit)
-        * [Quantum job pricing](https://docs.microsoft.com/azure/quantum/azure-quantum-job-costs)
+        * [Quantum job pricing](https://docs.microsoft.com/azure/quantum/azure-quantum-job-costs) (not terribly illuminating in March 2022)
         * [Cirq circuits: Submitting to Azure Quantum documentation](https://docs.microsoft.com/azure/quantum/quickstart-microsoft-cirq?pivots=platform-ionq)
     * The **quantum workspace** is hosted in the Resource Group. Select it to enter that environment.
     * Add some tags to provide context for the casual or future observer
