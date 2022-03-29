@@ -27,18 +27,21 @@ Get started:
             * submit this program as a job to the **`"ionq.simulator"`** target
             * await the results: 35 seconds for example; printout is probabilities for two states
             * use **`cirq.vis`** to plot state histogram
-            * estimate the cost: 1 USD for the simulator
+            * estimate the cost: 1 USD for the simulator (but the simulator should be free)
                 * I replaced **`.simulator`** with **`.qpu`** and re-ran
                 * This time 10 minutes elapsed: No response
                 * Question: Can I close up shop and come back later to see what happened?
                 * Question: Is the qpu approach appreciably more expensive that 1 USD?
 
 
-Above was a first session. The **`qpu`** job would not complete; so I left. 
-Session two: Re-open the quantum workspace: *Notebooks* in the left sidebar: My notebooks folder: Ok. 
-There are seven notebooks copied here: grovers-search,
+Above was a first session. The **`qpu`** job would not complete; so I scrammed. 
+Session two: Re-open the quantum workspace: *Notebooks* in the left sidebar: My notebooks folder: Ok, 
+persisted seven notebooks: grovers-search,
 hello-world-cirq-ionq, hello-worlds for qiski and qsharp; plus hidden-shift, noisy-deutsch-jozsa, 
-and finally parallel-qrng. 
+and finally parallel-qrng.
+
+
+However: Cell output is erased.
 
 
 The hello-world-cirq-ionq notebook has several runnable Python cells. The first one creates a **`service`** object 
@@ -47,9 +50,11 @@ Last time I ran the simulator and then submitted the qpu job that did not finish
 seem to run **`service.get_jobs()`** without the job id; which was printed but the output was erased; so I 
 restarted it. This time the job id is `0711b826-af98-11ec-b345-00155d329a60`. 
 
-Now that the **`job`** object is active: I can recover the job id with **`job.job_id()`**. 
 
-Oh, but wait: There is a left menu item Job management: Table: jobs with ids and targets. Click the Name for 
+Now that the **`job`** object is active: Recover the job id with **`job.job_id()`**. 
+
+
+***Key advance:*** There is a left menu item Job management: Table: jobs with ids and targets. Click the Name for 
 Job details: Apparently the qpu job took 17 hours to run but only 2 seconds of execution time. From Job details:
 Download input and output: 
 
@@ -63,7 +68,20 @@ and
 {"histogram":{"0":0.47,"1":0.53}}
 ```
 
-For 100 trials of a coin toss this is reasonable. 
+For 100 trials of a coin toss this is reasonable. Ok so now let's do this in code. First using the 
+*Job management* operation (left bar) I recover the job id string and execute this Python: 
+
+```
+job = service.get_job('c815e04e-aaf0-11ec-8cb5-00155d0031ca')
+result = job.results()
+result.probabilities()
+```
+
+producing:
+
+```
+{0: 0.47, 1: 0.53}
+```
 
 
 
