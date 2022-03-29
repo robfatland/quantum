@@ -69,10 +69,10 @@ and
 ```
 
 For 100 trials of a coin toss this is reasonable. Ok so now let's do this in code. First using the 
-*Job management* operation (left bar) I recover the job id string and execute this Python: 
+*Job management* operation (left bar) recover the job id string, then execute this Python: 
 
 ```
-job = service.get_job('c815e04e-aaf0-11ec-8cb5-00155d0031ca')
+job = service.get_job('c815e04e-aaf0-11ec-8cb5-001579a031ca')
 result = job.results()
 result.probabilities()
 ```
