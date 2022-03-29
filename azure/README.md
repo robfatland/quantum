@@ -1,8 +1,12 @@
 # Intro
 
+
 Search Azure quantum tutorial to arrive at [this documentation](https://docs.microsoft.com/en-us/azure/quantum/).
 
-Get started:
+
+## First session
+
+
 * [Create an Azure Quantum workspace](https://docs.microsoft.com/en-us/azure/quantum/how-to-create-workspace?tabs=tabid-quick)
     * Create a resource; select Azure Quantum, follow the steps > end result is a quantum workspace Resource Group
     * Next steps and content links:
@@ -34,42 +38,49 @@ Get started:
                 * Question: Is the qpu approach appreciably more expensive that 1 USD?
 
 
-Above was a first session. The **`qpu`** job would not complete; so I scrammed. 
-Session two: Re-open the quantum workspace: *Notebooks* in the left sidebar: My notebooks folder: Ok, 
-persisted seven notebooks: grovers-search,
+
+## Second session
+
+In the first session, the **`qpu`** job did not complete; so I scrammed. 
+Now: Log in to Azure > Subscription > Re-open the quantum workspace > *Notebooks* left sidebar > My notebooks folder > 
+The seven copied notebooks persist. These are: grovers-search,
 hello-world-cirq-ionq, hello-worlds for qiski and qsharp; plus hidden-shift, noisy-deutsch-jozsa, 
 and finally parallel-qrng.
 
 
-However: Cell output is erased.
+However: Cell output is erased. Of course the **`AzureQuantumService()`** does not persist. So this notebook 
+environment is Jupyter-like but I'd say not identical. Cell merge, for example, does not seem to be keyed to shift + M.
 
 
-The hello-world-cirq-ionq notebook has several runnable Python cells. The first one creates a **`service`** object 
-(9 seconds). This (second cell) lists eight services including the **`ionq`** **`simulator`** and **`qpu`**. 
-Last time I ran the simulator and then submitted the qpu job that did not finish. Unfortunately I can't
-seem to run **`service.get_jobs()`** without the job id; which was printed but the output was erased; so I 
-restarted it. This time the job id is `0711b826-af98-11ec-b345-00155d329a60`. 
+The hello-world-cirq-ionq notebook has Python cells. The first one creates the above **`service`** object 
+(9 seconds). Eight services are shown including the **`ionq`** **`simulator`** and **`qpu`**. 
+Last time I ran the simulator and then submitted the qpu job that did not finish. I need to pass
+the job id string to **`service.get_jobs()`** but that's gone now.
 
 
-Now that the **`job`** object is active: Recover the job id with **`job.job_id()`**. 
+Note: Once a **`job`** object is active: Recover the job id with **`job.job_id()`**. 
 
 
-***Key advance:*** There is a left menu item Job management: Table: jobs with ids and targets. Click the Name for 
-Job details: Apparently the qpu job took 17 hours to run but only 2 seconds of execution time. From Job details:
-Download input and output: 
+***Key advance:*** Note the left menu item Job management > Table > jobs with ids and targets. Click the Name for 
+Job details: Apparently the qpu job took 17 hours to run with only 2 seconds of execution time. From Job details:
+Download input: 
+
 
 ```
 {"qubits": 1, "circuit": [{"gate": "h", "targets": [0]}]}
 ```
 
-and
+
+Output:
+
 
 ```
 {"histogram":{"0":0.47,"1":0.53}}
 ```
 
-For 100 trials of a coin toss this is reasonable. Ok so now let's do this in code. First using the 
-*Job management* operation (left bar) recover the job id string, then execute this Python: 
+
+For 100 trials of a coin toss this is reasonable. In code: Use
+*Job management* (left bar) to recover the job id string, then execute: 
 
 ```
 job = service.get_job('c815e04e-aaf0-11ec-8cb5-001579a031ca')
