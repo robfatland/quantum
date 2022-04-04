@@ -18,4 +18,31 @@ Here are some notes; the elaboration is still needed but for what it is worth:
     - Use quantum devices
 - Control page left menu: Can look up jobs to see completion status, download results.
 
-
+```
+{
+    "braketSchemaHeader": {
+        "name": "braket.task_result.gate_model_task_result",
+        "version": "1"
+    },
+    "measurements": [
+        [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+...etcetera...
+```
+  
+  
