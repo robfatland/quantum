@@ -17,3 +17,5 @@ Here are some notes; the elaboration is still needed but for what it is worth:
     - Use Simulators running on EC2
     - Use quantum devices
 - Control page left menu: Can look up jobs to see completion status, download results.
+
+
