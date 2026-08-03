@@ -1,0 +1,470 @@
+# Snapshot Outline
+
+Topic outline of all working documents with inline cross-references.
+Generated 2025-07-15.
+
+---
+
+- **Q0.md** — Mathematical foundations: fields, vector spaces, inner products, and the construction of Hilbert space
+    - ## Vector fields to Hilbert space
+        - ### Fields
+            - Sets, operations, abelian groups under addition and multiplication
+            - Distributive axiom completes the field definition
+            - Fields provide scalars for vector spaces
+        - ### The vector space
+            - Vector addition (abelian group) and scalar multiplication
+            - Eight axioms: closure, associativity, identity, inverses, compatibility, distributivity
+        - ### Linear independence, span, basis, dimension
+            - Definitions and the uniqueness of decomposition
+            - Basis-independence of the abstract vector vs. basis-dependence of components
+    - ## From vector space to Hilbert space
+        - ### Definition
+        - ### 1. Start with a Vector Space
+        - ### 2. Define an Inner Product
+            - Conjugate symmetry, linearity, positive definiteness
+            - $\to$ relates to Q1.md "Dirac notation and the inner product"
+        - ### 3. Induce a Norm
+            - Parallelogram law and "round" geometry
+            - $\to$ relates to QA.md "The parallelogram law: geometric interpretation"
+        - ### 4. Complete the Space
+            - Cauchy sequences, equivalence classes, completion
+        - ### Example: an inner product space that is not complete
+            - Continuous functions on [0,1] converging to a step function
+        - ### Examples (table: $\mathbb{R}^n$, $\ell^2$, $L^2$)
+        - ### Important Properties
+            - Riesz Representation Theorem, orthonormal bases, Projection Theorem
+        - ### Why Completeness Matters
+
+- **Q1.md** — Working in Hilbert space: qubits, states, Dirac notation, the inner product, and the fundamental postulate
+    - ## Notation
+        - Ket/bra notation, Hermitian inner product definition
+    - ## The state
+        - ### A digression on the idea of a quantum system
+            - Quantum system defined informally and formally
+            - Unitary evolution preserves probability
+            - $\to$ relates to Q2.md "What is a quantum system?"
+        - ### The simplest non-trivial quantum system
+            - $\mathbb{C}^2$, basis vectors $|0\rangle$, $|1\rangle$
+            - State vector $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$
+            - Classical bit vs. qubit distinction
+        - ### A first look at the inner product of two vectors
+            - Born rule: $|\langle\phi|\psi\rangle|^2$ as transition probability
+            - Orthogonality, basis expansion as implicit inner product
+        - ### A first visualization of $\mathbb{C}^2$
+            - Two complex unit discs for $\alpha$ and $\beta$
+            - Four degrees of freedom reduced to two physical ones
+            - $\to$ relates to Q5.md "Setup: the Z-basis in $\mathbb{C}^2$"
+    - ## Dirac notation and the inner product
+        - Conjugate symmetry, linearity, positive definiteness (formal)
+        - Cauchy-Schwarz inequality, probability interpretation
+        - $\to$ relates to Q0.md "2. Define an Inner Product"
+    - ## The fundamental postulate of quantum mechanics
+        - State = ray in Hilbert space; normalization; global phase
+        - $\to$ relates to Q2.md "Visualizing global phase degeneracy"
+    - ## Operators and measurement
+        - Gates (unitary) vs. observables (Hermitian)
+    - ## Combine with above: Retrace your steps
+        - ### What is a quantum state, really?
+            - Bloch sphere parameters $\theta$, $\phi$ from polar decomposition
+            - $\to$ relates to Q2.md "From $\alpha$, $\beta$ to $\theta$, $\varphi$, $\gamma$"
+        - ### Why complex scalars? The role of interference
+            - $\mathbb{C}$ required for continuous interference
+            - $\to$ relates to Q6.md "The question" (double slit as two-state system)
+
+- **Q2.md** — The Hadamard gate as 2-point DFT; Bloch sphere; multi-qubit systems; gates in action
+    - ## Spadework
+        - Quantum computing workflow: initialize-transform-measure-repeat
+        - ### The Pauli spin matrices
+            - $\sigma_x$, $\sigma_y$, $\sigma_z$ definitions, eigenvalues $\pm 1$
+            - $\to$ relates to Q3.md "The Pauli matrices and the Bloch sphere"
+            - $\to$ relates to Q5.md "Summary: three operators, three bases"
+        - ### Unitary and Hermitian matrices: definitions
+            - Norm preservation, inner product preservation
+            - Connection: unitary = gates, Hermitian = observables
+    - ## Discrete Fourier Transform (DFT)
+        - 2-point DFT with symmetric normalization = Hadamard matrix
+        - $\to$ relates to Q3.md "The Fourier transform as change of basis"
+    - ## What is the basis in this situation?
+        - Z-basis ("time domain") vs. X-basis ("frequency domain")
+        - Hadamard as unitary change-of-basis matrix
+    - ## The Z-basis as the eigenbasis of $\sigma_z$
+    - ## Complex amplitudes
+        - $|+\rangle$, $|-\rangle$, $|{+i}\rangle$ as distinct physical states
+    - ## From $\mathbb{R}^2$ to $\mathbb{C}^2$: Why the scalar field matters
+        - Table comparing real vs. complex state spaces
+        - Physics demands $\mathbb{C}$ for interference
+    - ## Visualizing global phase degeneracy
+        - ### From $\alpha$, $\beta$ to $\theta$, $\varphi$, $\gamma$ — slowly
+            - Polar decomposition, Bloch sphere parameterization
+            - $\to$ relates to Q1.md "What is a quantum state, really?"
+        - ### Two complex planes: visualizing $\alpha$ and $\beta$
+            - $\to$ relates to Q5.md "Setup: the Z-basis in $\mathbb{C}^2$"
+        - ### Why is $\varphi$ azimuthal when the basis vectors are along z?
+            - Relative phase as a property of coefficients, not basis vectors
+        - ### Is global phase visible on the Bloch sphere?
+            - Hopf fibration: $S^3 \to S^2$
+        - ### An equivalent picture: the 3-sphere $S^3$ in four dimensions
+        - ### Summary of the logical chain
+        - ### Convention: global phase of eigenstates
+        - ### Invariance, symmetry, and conservation
+            - Noether's theorem connection to global phase / probability conservation
+    - ## The qubit as the atomic unit of quantum computing
+        - ### Is the qubit the only fundamental building block?
+            - Qutrits/qudits as niche research
+        - ### Multi-qubit systems build on the single-qubit foundation
+            - Tensor product construction, exponential state space
+            - $\to$ relates to Q4.md "Entanglement from another Basis" (tensor product)
+        - ### What's new in multi-qubit systems: entanglement
+            - Product states vs. Bell states
+            - $\to$ relates to Q4.md "What is entanglement?"
+    - ## What does the Hadamard gate actually move?
+        - ### Active picture (state moves, basis stays)
+        - ### Passive picture (state stays, basis moves)
+        - ### Why both are valid
+            - $\to$ relates to Q3.md "Complementarity in the qubit"
+    - ## Pauli gates: rotations on the Bloch sphere
+        - 180$^\circ$ rotations; rotation operators $R_x(\theta)$
+    - ## Pauli matrices: dual role as gate and observable
+        - $\to$ relates to Q3.md "The dual role of operators: gates versus observables"
+    - ## Density matrix, energy eigenstates, and decoherence
+        - ### The density matrix
+            - Off-diagonal elements = coherence
+            - $\to$ relates to Q4.md "The density matrix formalism"
+        - ### Energy of $|0\rangle$ and $|1\rangle$
+            - Physical implementations table (transmon, trapped ion, photon, spin)
+            - $\to$ relates to PEARC.md "Notes on IBM hardware execution"
+        - ### Decoherence on the Bloch sphere
+            - $T_1$ relaxation, $T_2$ dephasing
+        - ### Decoherence on the $\mathbb{C}^2$ double-disk diagram
+        - ### The interior of the Bloch sphere
+            - Mixed states live inside; density matrix needed
+            - $\to$ relates to Q4.md "The interior represents mixed states"
+    - ## Why is the dimension of the simplest Hilbert space 2?
+    - ## What is a quantum system?
+        - Isolation, state as vector, unitary evolution
+        - $\to$ relates to Q1.md "A digression on the idea of a quantum system"
+    - ## Quantum vector vs classical point
+        - Superposition, inner product, basis choices, interference
+        - Four structural differences from classical phase-space points
+
+- **Q3.md** — Operator/basis duality, Fourier transform as change of basis, and conceptual reinforcement
+    - ## One state, many representations
+        - Position basis vs. momentum basis for a particle
+    - ## The Fourier transform as change of basis
+        - Position $\leftrightarrow$ momentum integral transforms
+        - $\to$ relates to Q2.md "Discrete Fourier Transform (DFT)"
+    - ## Conjugate observables and non-commutativity
+        - $[\hat{x}, \hat{p}] = i\hbar$; Heisenberg uncertainty principle
+    - ## Operators in each basis
+        - Operator/basis duality table (multiply vs. differentiate)
+    - ## The qubit analog
+        - Z-basis $\leftrightarrow$ position; X-basis $\leftrightarrow$ momentum; Hadamard $\leftrightarrow$ FT
+        - $\to$ relates to Q2.md "What is the basis in this situation?"
+    - ## Complementarity in the qubit
+        - Certainty in one basis $\to$ maximal uncertainty in conjugate
+        - Algorithmic role of H at start/end of circuits
+        - $\to$ relates to Q7.md "H P H calculation"
+    - ## The Pauli matrices and the Bloch sphere
+        - Three measurement axes; Bloch sphere parameterization
+        - Hadamard as 180$^\circ$ rotation about XZ diagonal
+        - $\to$ relates to Q5.md "Summary: three operators, three bases"
+    - ## Summary of the duality
+    - ## Connecting back to the ansätze
+        - Verifying Q0/QA ansätze against developed formalism
+        - $\to$ relates to QA.md "The stack"
+    - ### Why is the relative phase $\phi$ physically meaningful?
+        - Measurement in other bases reveals $\phi$
+        - Table: Z, X, Y measurement protocols
+        - $\to$ relates to Q7.md "What does the second H do?"
+    - ### The dual role of operators: gates versus observables
+        - Pauli matrices as both unitary (gate) and Hermitian (observable)
+        - $\to$ relates to Q2.md "Pauli matrices: dual role as gate and observable"
+    - ### Measurement: what makes it different
+        - Probabilistic, irreversible, basis-dependent, classical output
+        - Quantum state tomography
+    - ### The Hadamard as DFT: what does this analogy actually mean?
+        - DC vs. oscillation; Z-basis = "which position", X-basis = "what frequency"
+        - $\to$ relates to Q7.md "Mapping to a quantum circuit"
+    - ### What the knowledge check revealed
+        - Five conceptual gaps identified and addressed
+
+- **Q4.md** — Entanglement, controlled gates, and the interior of the Bloch sphere
+    - ## What is entanglement?
+        - ### The definition
+            - Non-factorizability of multi-qubit states
+            - Bell state $|\Phi^+\rangle$ factorization contradiction proof
+        - ### What entanglement means physically
+            - Neither qubit has individual state; correlations are non-classical
+    - ## How does a CNOT gate produce entanglement?
+        - ### The CNOT gate
+            - Truth table and 4$\times$4 matrix
+        - ### When CNOT does NOT produce entanglement
+            - Control in basis state $\to$ product state output
+        - ### When CNOT DOES produce entanglement
+            - Control in superposition $\to$ Bell state
+            - $\to$ relates to Q2.md "What's new in multi-qubit systems: entanglement"
+        - ### The general principle
+            - Superposition on control is necessary and sufficient
+    - ## Entanglement and the interior of the Bloch sphere
+        - ### Pure states live on the surface
+        - ### The interior represents mixed states
+            - Maximally mixed state $\rho = I/2$ at center
+            - $\to$ relates to Q2.md "The interior of the Bloch sphere"
+        - ### How entanglement puts qubits inside the sphere
+            - Reduced density matrix; tracing out partner
+        - ### Why this happens
+            - Information exported to nonlocal correlations
+            - Ontological vs. epistemic uncertainty
+        - ### The density matrix formalism
+            - Pure ($r=1$) vs. mixed ($r<1$) states; Bloch vector formula
+            - $\to$ relates to Q2.md "Density matrix, energy eigenstates, and decoherence"
+        - ### Summary of the three-way connection (table)
+    - ## Entanglement from another Basis
+        - ### Defining the tensor product
+            - States (Kronecker product) and operators (block matrix)
+            - $\to$ relates to Q2.md "Multi-qubit systems build on the single-qubit foundation"
+        - ### The joint Hilbert space exists whether or not qubits are entangled
+        - ### $H \otimes H$ versus the QFT: two very different 4$\times$4 matrices
+            - $H \otimes H$ factors, cannot entangle, is self-inverse
+            - QFT$_4$ does not factor, has complex entries, requires conjugation for inverse
+            - $\to$ relates to Q3.md "The qubit analog" and Q7.md "Mapping to a quantum circuit"
+        - ### Does the QFT have its own operator symbol? Is there a multi-qubit family?
+            - Multi-qubit gate taxonomy table
+        - ### Reading states: how to tell entangled from not
+            - Factorization test, amplitude matrix determinant heuristic
+            - Three-or-more qubits: bipartition and GHZ vs. W states
+
+- **Q5.md** — Bases in $\mathbb{C}^2$: the Y-basis and the two-plane picture
+    - ## Setup: the Z-basis in $\mathbb{C}^2$
+        - Two complex unit disks ($C_0$, $C_1$) visualization
+        - $\to$ relates to Q1.md "A first visualization of $\mathbb{C}^2$"
+        - $\to$ relates to Q2.md "Two complex planes: visualizing $\alpha$ and $\beta$"
+    - ## Motivating eigenvalues from transformations in $\mathbb{C}^2$
+        - ### The question
+        - ### What $\sigma_z$ does in $\mathbb{C}^2$
+            - Negates $\beta$; effect on relative phase
+        - ### Eigenvalues of $\sigma_z$: the fixed points
+            - +1 for $|0\rangle$, $-1$ for $|1\rangle$; eigenvalue vs. ray subtlety
+        - ### The plan: from transform to eigenvectors to matrix
+    - ## $\sigma_x$: what it does and its eigenvectors
+        - ### Action of $\sigma_x$ in $\mathbb{C}^2$
+            - Swaps components; negates relative phase
+        - ### The X-basis eigenvectors as column vectors
+        - ### Verifying they are eigenvectors
+        - ### Cross-check with Bloch sphere
+    - ## $\sigma_y$: what it does and its eigenvectors
+        - ### Action of $\sigma_y$ in $\mathbb{C}^2$
+            - Swap plus $\pm i$ rotation
+        - ### The Y-basis eigenvectors as column vectors
+            - $|{+i}\rangle$, $|{-i}\rangle$ in two-plane picture
+        - ### Verifying they are eigenvectors
+        - ### The two-plane picture for $\sigma_y$ eigenstates
+        - ### Cross-check with Bloch sphere
+    - ## Summary: three operators, three bases
+        - Table: operator, action, eigenvectors, eigenvalues, Bloch axis
+        - $\to$ relates to Q2.md "The Pauli spin matrices"
+        - $\to$ relates to Q3.md "The Pauli matrices and the Bloch sphere"
+
+- **Q6.md** — The double slit as a two-state system
+    - ## The question
+        - Can the double-slit experiment be described in $\mathbb{C}^2$?
+    - ## Context: the simplest quantum system
+        - Two degrees of freedom from $\mathbb{C}^2$; global phase discarded
+    - ## Answer: yes, with a caveat
+        - ### The two-state ("which path") description
+            - Path qubit: $|A\rangle$, $|B\rangle$; equal superposition = $|+\rangle$
+        - ### Where the extra structure comes from
+            - Position degree of freedom via tensor product
+            - Position-dependent phase $\phi(x)$ produces fringe pattern
+            - Intensity $I(x) \propto \cos^2(\phi(x)/2)$
+            - $\to$ relates to Q7.md "The physical apparatus" and "The intensity pattern"
+        - ### The connection to $\mathbb{C}^2$
+            - Bloch equator mapped to spatial coordinate
+            - $\to$ relates to Q7.md "H P H calculation"
+        - ### Summary (table: two-state vs. full double-slit)
+        - ### The which-path connection
+            - Measuring path destroys interference; Z-measurement kills X-information
+            - $\to$ relates to Q3.md "Complementarity in the qubit"
+
+- **Q7.md** — Double slit experiment: physical apparatus, quantum circuit implementation, and operator construction
+    - ## The physical apparatus
+        - ### Geometry
+            - Path-length difference $\Delta = d\sin\theta$
+        - ### Interference condition
+            - Constructive/destructive fringe positions; fringe spacing
+        - ### Concrete numbers for a red laser pointer
+            - Laser: $\lambda = 650$ nm; three slit pairs; fringe spacing calculations
+            - $\to$ relates to PEARC.md "Three execution tiers" (physical demo)
+        - ### The intensity pattern
+            - $I(x) = I_0 \cos^2 \cdot \text{sinc}^2$; interference vs. diffraction
+            - $\to$ relates to Q6.md "Where the extra structure comes from"
+        - ### Why $\cos^2 \times \text{sinc}^2$: derivation from first principles
+            - Single slit (sinc from FT of rectangle), two slits (cosine from two phasors), squaring
+            - Counting rule: fringes in central lobe $\approx 2(d/w) - 1$
+    - ## Mapping to a quantum circuit
+        - ### The conceptual translation (table)
+        - ### The discrete model
+            - Screen discretized to $N = 2^k$ bins
+        - ### Why the QFT is necessary
+            - Fraunhofer diffraction is a spatial FT; conjugate bases
+            - $\to$ relates to Q3.md "The Fourier transform as change of basis"
+        - ### The circuit in detail
+            - Momentum-space initialization, QFT, measurement
+        - ### Finite slit width and the envelope
+        - ### Correspondence between physical and circuit parameters (table)
+            - $\to$ relates to DSE.md "The sinc$^2$ envelope"
+    - ## A Dialog on the simple DSE H-P-H-M circuit
+        - ### Tracing basis vectors
+            - $|0\rangle$, $|1\rangle$ in $\mathbb{C}^2$ and on the Bloch sphere
+        - ### Quantum circuit components
+            - Circuit diagram; classical register; measurement bit index
+        - ### H P H calculation
+            - H puts $|0\rangle$ into $|+\rangle$; $P_\phi$ adds relative phase; second H interferes
+            - $\text{Pr}(0) = \cos^2(\phi/2)$ derivation
+            - $\to$ relates to PEARC.md "Theoretical justification for the H-P-H circuit"
+            - $\to$ relates to DSE.md "The correct approach"
+        - #### Deciphering the circuit
+            - Bloch (geometric) vs. interference (algebraic) descriptions reconciled
+            - Classical vs. quantum probability: amplitude addition with cross-term
+        - #### Measurement
+            - Gate vs. measurement in Qiskit code
+        - #### The measurement process per shot
+            - Projectors $P_0$, $P_1$; outer product vs. inner product
+            - Post-measurement state
+        - #### Simulator versus hardware
+            - Simulator: state vector + random draw; hardware: microwave readout + Born rule
+            - $\to$ relates to PEARC.md "Measuring noise: simulator vs real hardware"
+    - ### Constructing an operator
+        - #### The Hadamard gate: rotation about the XZ diagonal
+            - Derived from rotation formula $U = \cos(\theta/2)I - i\sin(\theta/2)(\hat{n}\cdot\vec\sigma)$
+        - #### $\sigma_x$: rotation about the X-axis
+        - #### $\sigma_y$: rotation about the Y-axis
+        - #### $P(\phi)$: rotation about the Z-axis
+            - $R_z(\phi)$ vs. Qiskit $P$ gate convention
+        - #### The pattern
+            - Every single-qubit gate = Bloch sphere rotation; Euler decomposition
+
+- **QA.md** — Appendix: PDF generation, bookkeeping, and the parallelogram law
+    - ## PDF generation
+        - Full-document and single-file pandoc commands
+    - ## Bookkeeping
+    - ## The stack
+        - Ansätze / overheard fragments to be accounted for
+        - Operator/basis table (position vs. momentum representation)
+        - Open research questions and topics to cover
+        - $\to$ relates to Q3.md "Connecting back to the ansätze"
+    - ## The parallelogram law: geometric interpretation
+        - ### The statement
+        - ### The geometry
+            - Diagonals of a parallelogram vs. sides
+        - ### Why it matters for Hilbert spaces
+            - Litmus test for inner-product norms; polarization identity
+            - $\to$ relates to Q0.md "3. Induce a Norm"
+
+- **DSE.md** — Double Slit Experiment implementation notes: what failed, what worked, demo architecture
+    - ## Status
+    - ## What was tried and why it failed
+        - ### Attempt 1: Slit qubit + controlled phases + inverse QFT
+            - Entanglement with screen register destroys interference
+        - ### Attempt 2: Post-selection on slit qubit
+            - Ordering and phase-wrapping issues
+        - ### Attempt 3: Conditional basis state preparation + QFT
+            - Partial success; parameter tuning problems
+        - ### Attempt 4: initialize() + transpile
+            - Works but pre-computes the answer ("dishonest algorithm")
+    - ## The correct approach (from Akshat-Srivastava015 GitHub repo)
+        - Single-qubit H-P-H circuit per screen position
+        - $\to$ relates to Q7.md "H P H calculation"
+        - $\to$ relates to PEARC.md "Theoretical justification for the H-P-H circuit"
+    - ## The sinc$^2$ envelope
+        - $\cos^2$ from separation; $\text{sinc}^2$ from slit width
+        - Ry-based envelope alternative sketch
+        - $\to$ relates to Q7.md "Finite slit width and the envelope"
+    - ## Implementation status
+        - `double_slit_statevector.py` (Statevector, no shots)
+        - `double_slit.py` (AerSimulator or IBM hardware)
+    - ## PEARC demo notes (reveal-o-tron concept)
+        - Pre-computed JSON playback; three-tier architecture
+        - Physical demo: red laser + double-slit slide
+        - $\to$ relates to PEARC.md "Three execution tiers"
+    - ## Multi-qubit conceptual circuit (pedagogical, not run)
+        - Why it failed; H-P-H sidesteps the problem
+
+- **CloudQuantum.md** — Comparative overview of four cloud quantum computing platforms
+    - ## Summary Table
+        - AWS Braket, Azure Quantum, IBM Quantum, Google Quantum AI
+        - Model, SDK, hardware, pricing, qubit counts, hybrid jobs
+    - ## Key Differentiators
+        - AWS: hardware-agnostic marketplace
+        - Azure: multi-SDK, generous credits, resource estimation
+        - IBM: vertically integrated, largest qubits, mature ecosystem
+        - Google: research-first, error-correction leader
+    - ## Choosing a Platform (decision table)
+        - $\to$ relates to PEARC.md "Cloud quantum stacks"
+    - ## Common Workflow Across All Platforms
+        - Define $\to$ build $\to$ transpile $\to$ submit $\to$ retrieve
+    - ## See Also
+        - Links to provider-specific READMEs
+
+- **PEARC.md** — Conference demo: H-P-H circuit justification, execution tiers, IBM Quantum access, and noise analysis
+    - ## Theoretical justification for the H-P-H circuit
+        - Step-by-step derivation: H, P($\phi$), H, measure
+        - $\to$ relates to Q7.md "H P H calculation"
+        - $\to$ relates to DSE.md "The correct approach"
+    - ## Post hoc sinc$^2$ envelope
+        - $\to$ relates to DSE.md "The sinc$^2$ envelope"
+    - ## Three execution tiers (table)
+        - Tier 1: localhost AerSimulator
+        - Tier 2: IBM cloud VM AerSimulator
+        - Tier 3: IBM Quantum hardware
+        - $\to$ relates to DSE.md "PEARC demo notes"
+    - ## Cloud quantum stacks (table)
+        - $\to$ relates to CloudQuantum.md "Summary Table"
+    - ## Access paths to IBM Quantum
+        - ### Plan comparison (Open, Pay-As-You-Go, Flex, Premium)
+            - Cost estimate for DSE test
+        - ### Credential setup by plan
+        - ### Benefits and drawbacks (table)
+        - ### CloudBank access path (ambiguous)
+            - Unresolved helpdesk question on billing mechanism
+        - ### 1. Create an IBM Quantum account
+        - ### 2. Get your API token
+        - ### 3. Install the runtime package
+        - ### 4. Save your credentials
+        - ### 5. Connect and select a backend
+        - ### 6. Transpile for the target hardware
+        - ### 7. Submit via SamplerV2
+        - ### 8. Retrieve results
+        - ### 9. Run via double_slit.py (all-in-one)
+        - ### Notes on IBM hardware execution
+            - Noise sources (shot noise, decoherence, gate errors, readout errors)
+            - Maintenance, regions, queue times, sessions
+            - $\to$ relates to Q2.md "Energy of $|0\rangle$ and $|1\rangle$" (transmon physics)
+    - ## Measuring noise: simulator vs real hardware
+        - ### What "noise" means here
+            - Shot noise vs. hardware noise
+        - ### The experiment
+            - Three-step bash workflow (local, ibm, noise_analysis.py)
+        - ### What the analysis measures
+            - Fringe visibility, bias at dark fringes, chi-squared, excess variance, residuals
+        - ### Expected results (table)
+        - ### Why this matters
+            - Demonstrates genuine quantum-mechanical behavior vs. classical RNG
+            - $\to$ relates to Q7.md "Simulator versus hardware"
+
+- **OpenTopics.md** — Parked ideas and alternative demo experiments
+    - ## Alternative PEARC Demo Experiments (parked)
+        - Bell/CHSH test with polarizers
+        - Quantum random walk on a ring
+        - Hydrogen orbitals via VQE
+        - Positronium annihilation correlations
+        - Entangled Stern-Gerlach
+        - Single-slit vs double-slit tradeoff
+    - ## Other Parked Ideas
+        - Hydrogen orbitals, PIAB on a ring, positronium
+
+- **QuantumComputing.md** — Repository top-level README (brief)
+    - Single paragraph: context from quantum mechanics, working case study on IBM cloud
+
+- **DevelopmentLog.md** — Reproducibility log
+    - Noteworthy: single entry (2026-06-26) documenting initial Qiskit + Aer installation via pip

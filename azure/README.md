@@ -1,6 +1,43 @@
 # Azure Quantum
 
 
+## COST WARNING
+
+**Azure Quantum hardware providers can be extremely expensive.** Each provider sets its own
+pricing, and costs vary by orders of magnitude. Before running ANY code on a QPU target,
+you must understand the pricing model for your chosen provider and estimate your total cost.
+
+**Critical example: IonQ bills per gate, not per shot.** A circuit with 3 single-qubit
+gates run for 2000 shots may appear cheap per-shot, but complex circuits scale fast.
+Quantinuum's H-Series uses "H-System Quantum Credits" (HQCs) where a single moderately
+complex circuit can consume hundreds of dollars of credit.
+
+**The $500 free credit per provider helps — but can be exhausted quickly.** IonQ's
+credits cover roughly 5,000–10,000 simple-circuit executions. Quantinuum's credits may
+cover only a few dozen complex circuits on H-Series hardware. Once credits are exhausted,
+charges appear on your Azure Marketplace bill with no further confirmation.
+
+**Comparison for a DSE-style experiment (200 positions, 2000 shots, 1 run):**
+
+| Provider | Pricing model | Approximate cost |
+|----------|--------------|-----------------|
+| IonQ (trapped ion) | Per-gate | $500–$2,000+ |
+| Quantinuum (trapped ion) | HQC credits | $1,000–$5,000+ |
+| Rigetti (superconducting) | Per-shot (~$0.00035) | ~$200 |
+| Azure simulators | Free (covered by credits) | $0 |
+
+**Before running on QPU hardware:**
+1. Check your remaining credits in the workspace under **Credits and quotas**
+2. Estimate cost: consult the provider's pricing calculator or documentation
+3. Start with the provider's **simulator** target (e.g. `ionq.simulator`) — these are
+   free or credit-covered and verify your circuit works before spending on hardware
+4. Set quotas in the workspace to prevent accidental overspend
+
+**Key difference from AWS Braket:** Azure does not have a universal spending-limit
+mechanism. You must monitor credits per provider individually. Marketplace charges can
+appear without a hard stop once credits are depleted.
+
+
 ## Overview
 
 Azure Quantum is Microsoft's cloud platform for quantum computing. It provides a workspace

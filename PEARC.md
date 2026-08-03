@@ -281,3 +281,108 @@ with Session(service=service, backend=backend) as session:
     job = sampler.run(transpiled, shots=1000)
     result = job.result()
 ```
+
+
+## Measuring noise: simulator vs real hardware
+
+The simulator and real quantum hardware both produce the $\cos^2(\phi/2)$ interference
+pattern, but with different kinds of imperfection. Running the same experiment on both
+and comparing the results reveals exactly what real quantum hardware adds to the picture.
+
+
+### What "noise" means here
+
+Think of noise as anything that makes the measured result differ from the theoretical
+prediction. There are two flavors:
+
+**Shot noise** (both simulator and hardware): Even a perfect device produces randomness.
+Each measurement is like flipping a biased coin --- you know the probability of heads is
+$\cos^2(\phi/2)$, but any finite number of flips will scatter around that value. This is
+fundamental to quantum mechanics and unavoidable. The more shots you take, the closer your
+average gets to the true probability (the scatter shrinks as $1/\sqrt{N}$).
+
+**Hardware noise** (real devices only): On top of the coin-flip randomness, real hardware
+introduces systematic distortions:
+
+- The "coin" is slightly miscalibrated (readout errors: the detector sometimes says
+  "heads" when the qubit was "tails," or vice versa, at a rate of roughly 1--2%)
+- The qubit loses energy to its environment between gates ($T_1$ decay: biases results
+  toward $|0\rangle$)
+- Gate pulses are imperfect (small rotation-angle errors accumulate)
+
+These effects wash out the fringe pattern: the bright peaks get slightly dimmer, and the
+dark troughs never quite reach zero.
+
+
+### The experiment
+
+Run the double-slit circuit with identical parameters on both backends:
+
+```bash
+# Step 1: Run on the local simulator
+python double_slit.py --backend local --screen-pts 100 --fringes 6 --shots-per-pos 2000
+
+# Step 2: Run on IBM hardware (free tier, when a backend is active)
+python double_slit.py --backend ibm --screen-pts 100 --fringes 6 --shots-per-pos 2000
+
+# Step 3: Compare the results
+python noise_analysis.py
+```
+
+Step 3 reads both result files (`double_slit_results_local.json` and
+`double_slit_results_ibm.json`) and computes several metrics. The output goes to the
+terminal and is also saved to `simulator_to_ibm_quantum_noise_analysis.txt`.
+
+
+### What the analysis measures
+
+**Fringe visibility** --- How much contrast is there between the bright and dark fringes?
+Defined as $V = (P_\text{max} - P_\text{min})/(P_\text{max} + P_\text{min})$. A perfect
+device gives $V = 1$ (peaks at 1, troughs at 0). Readout errors and decoherence reduce
+$V$ by pushing the peaks down and the troughs up. The simulator should give $V$ very close
+to 1; hardware will give something lower.
+
+**Bias at dark fringes** --- At positions where theory predicts zero detections, does the
+hardware still register some? If so, that's the readout error rate made directly visible.
+The simulator should show values near zero at these positions (just shot noise); hardware
+will show a small positive floor.
+
+**Chi-squared** --- A standard statistical test for "does the data match the theory?" It
+sums up the squared differences between observed and expected values, weighted by the
+expected variance. A score near 1 (per degree of freedom) means the noise is exactly what
+you'd expect from random coin-flipping. A score much greater than 1 means something
+systematic is going on beyond pure randomness. The simulator should score near 1; hardware
+will score higher.
+
+**Excess variance** --- Is the scatter in the data bigger than pure coin-flip statistics
+would predict? A ratio of 1.0 means the noise is exactly binomial (shot noise only). A
+ratio greater than 1.0 means the hardware is adding extra randomness on top. This extra
+noise comes from gate errors and environmental interference.
+
+**Residuals** --- The difference between each measured value and the theoretical
+prediction. For the simulator, these should average to zero (no bias). For hardware, a
+positive average at dark fringes (and/or negative at bright fringes) is the fingerprint
+of readout error compressing everything toward 50/50.
+
+
+### Expected results
+
+| Metric | Simulator | Hardware |
+|--------|-----------|----------|
+| Visibility $V$ | $\approx 1.00$ | $\approx 0.95\text{--}0.98$ |
+| Bias at dark fringes | $\approx 0$ | $\approx 0.01\text{--}0.02$ |
+| Chi-squared / dof | $\approx 1.0$ | $> 1.5$ |
+| Variance ratio | $\approx 1.0$ | $> 1.0$ |
+
+The magnitude of the hardware effects depends on which backend you get and its
+calibration state on that day. IBM publishes per-backend error rates at
+[quantum.ibm.com](https://quantum.ibm.com) under each system's detail page.
+
+
+### Why this matters
+
+This comparison demonstrates that quantum hardware is not just a simulator running
+somewhere else. The physics is real: the qubit interacts with its environment in ways a
+classical random number generator does not. The noise signature is the proof that
+something genuinely quantum-mechanical is happening --- and also the reason error
+correction is an active area of research.

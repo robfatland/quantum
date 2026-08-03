@@ -1,6 +1,40 @@
 # Amazon Braket
 
 
+## COST WARNING
+
+**Using quantum hardware on AWS Braket can be extremely expensive.** Braket is an AWS
+Marketplace service where QPU costs are billed per shot. Before running ANY code on a
+QPU device, you must understand the pricing and estimate your total cost.
+
+**Critical example: IonQ trapped-ion devices charge $0.08 per shot.** A seemingly modest
+experiment — 200 circuit positions at 2000 shots each — costs
+200 $\times$ 2000 $\times$ $0.08 = **$32,000**. This is because trapped-ion gate
+operations are physically slow (milliseconds per gate vs nanoseconds for superconducting),
+and IonQ's pricing reflects this: roughly 100$\times$ to 200$\times$ more expensive per
+shot than superconducting alternatives (Rigetti, IQM) on the same platform.
+
+**Comparison for a single experiment (200 positions, 2000 shots, 1 run):**
+
+| Device | Per-shot cost | Total cost |
+|--------|--------------|------------|
+| IonQ Forte (trapped ion) | $0.08 | ~$32,000 |
+| IQM (superconducting) | ~$0.00145 | ~$640 |
+| Rigetti (superconducting) | ~$0.00035 | ~$200 |
+| IBM (superconducting, time-based) | ~$1.60/sec | ~$5 |
+| Local simulator | $0 | $0 |
+
+**Before running on QPU hardware:**
+1. Check the device's per-shot price in the Braket console or via `get-device`
+2. Multiply: (number of circuits) $\times$ (shots per circuit) $\times$ (per-shot price) + (per-task fee $\times$ number of tasks)
+3. Set a spending limit in Braket Settings to prevent accidental overspend
+4. Consider whether the local simulator or a managed simulator (SV1, priced per-minute of compute) would suffice
+
+**Spending limits:** Configure these in the Braket console under Settings. They are
+per-device caps that block task submission if exceeded. Set them BEFORE running any QPU
+jobs.
+
+
 ## Overview
 
 Amazon Braket is a fully managed AWS service for quantum computing. It provides a unified

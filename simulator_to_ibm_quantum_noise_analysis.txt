@@ -1,0 +1,80 @@
+======================================================================
+NOISE ANALYSIS: Simulator vs IBM Quantum Hardware
+======================================================================
+
+Simulator file: double_slit_results_local.json
+  Backend: AerSimulator
+  Screen points: 100
+  Fringes: 6
+  Shots/position: 2000
+
+Hardware file: double_slit_results_ibm.json
+  Backend: IBM Hardware
+  Screen points: 100
+  Fringes: 6
+  Shots/position: 2000
+
+
+----------------------------------------------------------------------
+1. FRINGE VISIBILITY
+----------------------------------------------------------------------
+  Simulator:  V = 1.0000
+  Hardware:   V = 0.9802
+  Reduction:  2.0%
+  (V=1 is perfect contrast; V<1 indicates noise/decoherence)
+
+----------------------------------------------------------------------
+2. BIAS AT DARK FRINGES (readout error / T1 signature)
+----------------------------------------------------------------------
+  Positions near minima (theory P<0.1): 18
+  Positions near maxima (theory P>0.9): 22
+
+  Simulator mean P at minima:  0.0259  (expect ~0)
+  Hardware mean P at minima:   0.0378  (expect ~0)
+  Hardware bias floor: +0.0378
+
+  Simulator mean P at maxima:  0.9654  (expect ~1)
+  Hardware mean P at maxima:   0.9639  (expect ~1)
+  Hardware ceiling deficit: -0.0361
+
+----------------------------------------------------------------------
+3. CHI-SQUARED (goodness of fit to theory)
+----------------------------------------------------------------------
+  Degrees of freedom: 99
+  Simulator chi2:  113.3  (chi2/dof = 1.14)
+  Hardware chi2:   1098.3  (chi2/dof = 11.09)
+  (chi2/dof ~ 1.0 means noise matches binomial shot noise)
+  (chi2/dof >> 1 means systematic errors beyond shot noise)
+
+----------------------------------------------------------------------
+4. EXCESS VARIANCE (gate errors adding stochastic noise)
+----------------------------------------------------------------------
+  Simulator variance/binomial: 1.15x  (expect ~1.0)
+  Hardware variance/binomial:  1.83x  (expect >1.0)
+
+----------------------------------------------------------------------
+5. RESIDUAL STATISTICS
+----------------------------------------------------------------------
+  Simulator residuals:
+    Mean:   +2.95  (expect ~0)
+    Std:    16.58
+    Skew:   0.404
+
+  Hardware residuals:
+    Mean:   +10.97  (expect ~0 if no bias)
+    Std:    20.80
+    Skew:   1.900
+
+----------------------------------------------------------------------
+6. INTERPRETATION
+----------------------------------------------------------------------
+
+  * Visibility is comparable -> minimal hardware degradation
+  * Positive bias at dark fringes -> readout error
+    Estimated readout error rate: ~0.038
+  * Chi-squared excess -> systematic hardware noise beyond shot noise
+  * Excess variance -> gate errors contribute stochastic noise
+
+======================================================================
+END OF ANALYSIS
+======================================================================

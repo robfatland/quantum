@@ -4,28 +4,28 @@ Double-Slit Interference: Shot-based quantum circuit simulation.
 Identical code runs on:
   1. Local AerSimulator (for testing)
   2. IBM Quantum hardware (for real execution)
+  3. AWS Braket (future)
+  4. Azure Quantum (future)
+  5. GCP (future)
 
 The circuit: H-P(phi)-H-Measure on a single qubit, repeated for each
 screen position with a different phase phi. Each run uses shots (not
 statevector) so the output is genuine measurement statistics.
 
 Usage:
-  python double_slit.py                       # local simulator
-  python double_slit.py --backend ibm         # IBM hardware (requires API key)
-  python double_slit.py --animate             # + animated accumulation
-  python double_slit.py --fringes 8           # fringe periods
-  python double_slit.py --screen-pts 200      # screen resolution
-  python double_slit.py --shots-per-pos 1000  # shots at each position
+  python double_slit.py                              # 4 runs on local sim
+  python double_slit.py --backend ibm                # 4 runs on IBM hardware
+  python double_slit.py --backend ibm --runs 1       # single run
+  python double_slit.py --screen-pts 200 --runs 4    # 200 bins, 4 repeats
+  python double_slit.py --animate                    # + animated accumulation
+
+Output filenames encode platform and run number:
+  dse_results_{backend}_run{N}.json
+  dse_histogram_{backend}_run{N}.png
 
 Requirements:
   Local:  pip install qiskit qiskit-aer numpy matplotlib pylatexenc
   IBM:    pip install qiskit-ibm-runtime (+ IBM API key configured)
-
-Output:
-  double_slit_circuit.png    - the H-P-H circuit diagram
-  double_slit_histogram.png  - final histogram with theory overlay
-  double_slit_accumulate.mp4 - animated accumulation (if --animate)
-  double_slit_results.json   - raw results for reveal-o-tron playback
 """
 
 import matplotlib
@@ -70,10 +70,13 @@ def build_circuits(screen_points, num_fringes):
 
 
 def save_circuit_diagram(num_fringes):
-    """Save an example circuit diagram (with phi = pi/3 as illustration)."""
+    """Save an example circuit diagram (with symbolic phi)."""
+    from qiskit.circuit import Parameter
+    
+    phi = Parameter('φ')
     qc = QuantumCircuit(1, 1)
     qc.h(0)
-    qc.p(np.pi / 3, 0)  # illustrative phase
+    qc.p(phi, 0)
     qc.h(0)
     qc.measure(0, 0)
     
@@ -113,8 +116,10 @@ def run_local(circuits, shots_per_pos):
     return counts_list
 
 
-def run_ibm(circuits, shots_per_pos):
-    """Run on IBM Quantum hardware via Qiskit Runtime."""
+def run_ibm(circuits, shots_per_pos, max_retries=3):
+    """Run on IBM Quantum hardware via Qiskit Runtime (with retry)."""
+    import time
+
     try:
         from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2
     except ImportError:
@@ -124,7 +129,7 @@ def run_ibm(circuits, shots_per_pos):
     
     # Connect to IBM (assumes credentials are saved)
     print("  Connecting to IBM Quantum...")
-    service = QiskitRuntimeService()
+    service = QiskitRuntimeService(channel="ibm_cloud")
     
     # List available backends and pick the least busy
     print("  Discovering available backends...")
@@ -150,13 +155,26 @@ def run_ibm(circuits, shots_per_pos):
     # Transpile for the target hardware
     transpiled = transpile(circuits, backend)
     
-    # Run via Sampler primitive
-    print(f"  Submitting {len(circuits)} circuits x {shots_per_pos} shots...")
-    sampler = SamplerV2(backend)
-    job = sampler.run(transpiled, shots=shots_per_pos)
-    print(f"  Job ID: {job.job_id()}")
-    print("  Waiting for results...")
-    result = job.result()
+    # Run via Sampler primitive with retry
+    for attempt in range(1, max_retries + 1):
+        try:
+            print(f"  Submitting {len(circuits)} circuits x {shots_per_pos} shots"
+                  f" (attempt {attempt}/{max_retries})...")
+            sampler = SamplerV2(backend)
+            job = sampler.run(transpiled, shots=shots_per_pos)
+            print(f"  Job ID: {job.job_id()}")
+            print("  Waiting for results...")
+            result = job.result()
+            break
+        except Exception as e:
+            print(f"  Attempt {attempt} failed: {e}")
+            if attempt < max_retries:
+                wait = 15 * attempt
+                print(f"  Retrying in {wait}s...")
+                time.sleep(wait)
+            else:
+                print("  All retries exhausted.")
+                raise
     
     # Extract counts from SamplerV2 result
     counts_list = []
@@ -167,6 +185,85 @@ def run_ibm(circuits, shots_per_pos):
         counts = bitarray.get_counts()
         counts_list.append(counts)
     
+    return counts_list
+
+
+def run_aws(circuits, shots_per_pos, device='ionq'):
+    """Run on AWS Braket hardware (IonQ or Rigetti).
+
+    Args:
+        circuits: list of Qiskit QuantumCircuits
+        shots_per_pos: shots per circuit
+        device: 'ionq' for IonQ Aria, 'rigetti' for Rigetti Ankaa
+    """
+    try:
+        from braket.circuits import Circuit as BraketCircuit
+        from braket.aws import AwsDevice
+    except ImportError:
+        print("ERROR: amazon-braket-sdk not installed.")
+        print("  pip install amazon-braket-sdk")
+        raise SystemExit(1)
+
+    # Device ARNs
+    device_map = {
+        'ionq': 'arn:aws:braket:us-east-1::device/qpu/ionq/Forte-1',
+        'rigetti': 'arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-3',
+    }
+    if device not in device_map:
+        print(f"ERROR: Unknown AWS device '{device}'. Use 'ionq' or 'rigetti'.")
+        raise SystemExit(1)
+
+    device_arn = device_map[device]
+    print(f"  Connecting to AWS Braket device: {device} ({device_arn})")
+    hw = AwsDevice(device_arn)
+    print(f"  Device status: {hw.status}")
+
+    # Convert Qiskit circuits to Braket circuits
+    # For H-P-H-M on 1 qubit, build directly in Braket SDK
+    from braket.circuits import gates
+    import math
+
+    print(f"  Building {len(circuits)} Braket circuits...")
+    braket_circuits = []
+    phi_vals = []
+    for qc in circuits:
+        # Extract phi from the Qiskit circuit (the P gate parameter)
+        phi = None
+        for instruction in qc.data:
+            if instruction.operation.name == 'p':
+                phi = float(instruction.operation.params[0])
+                break
+        if phi is None:
+            phi = 0.0
+        phi_vals.append(phi)
+
+        # Build equivalent Braket circuit: H - Rz(phi) - H - Measure
+        # Use rz instead of phaseshift for IonQ compatibility
+        # (rz differs from phaseshift by a global phase, which doesn't affect measurement)
+        bc = BraketCircuit()
+        bc.h(0)
+        bc.rz(0, phi)
+        bc.h(0)
+        braket_circuits.append(bc)
+
+    # Submit circuits
+    print(f"  Submitting {len(braket_circuits)} circuits x {shots_per_pos} shots...")
+    counts_list = []
+    for i, bc in enumerate(braket_circuits):
+        task = hw.run(bc, shots=shots_per_pos)
+        result = task.result()
+        # Braket returns measurement counts as {'0': n0, '1': n1}
+        counts = result.measurement_counts
+        # Convert to Qiskit-style keys
+        qiskit_counts = {}
+        for bitstring, count in counts.items():
+            qiskit_counts[bitstring] = count
+        counts_list.append(qiskit_counts)
+
+        if (i + 1) % 20 == 0 or i == len(braket_circuits) - 1:
+            print(f"\r    Progress: {i+1}/{len(braket_circuits)}", end='', flush=True)
+
+    print()
     return counts_list
 
 
@@ -311,7 +408,8 @@ def save_animation(histogram, theory, screen_points, shots_per_pos, num_fringes)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Double-slit (H-P-H shots)')
-    parser.add_argument('--backend', choices=['local', 'ibm'], default='local',
+    parser.add_argument('--backend', choices=['local', 'ibm', 'aws_ionq', 'aws_rigetti'],
+                        default='local',
                         help='Execution backend (default: local simulator)')
     parser.add_argument('--animate', action='store_true',
                         help='Generate accumulation animation')
@@ -323,70 +421,112 @@ if __name__ == "__main__":
                         help='Shots per screen position (default: 1000)')
     parser.add_argument('--slit-ratio', type=float, default=3.0,
                         help='d/w for sinc envelope (default: 3.0)')
+    parser.add_argument('--runs', type=int, default=4,
+                        help='Number of experiment repetitions (default: 4)')
     args = parser.parse_args()
 
     screen_pts = args.screen_pts
     num_fringes = args.fringes
     shots_per_pos = args.shots_per_pos
     slit_ratio = args.slit_ratio
-    backend_name = 'AerSimulator' if args.backend == 'local' else 'IBM Hardware'
+    num_runs = args.runs
+
+    backend_labels = {
+        'local': 'AerSimulator',
+        'ibm': 'IBM_Hardware',
+        'aws_ionq': 'AWS_IonQ',
+        'aws_rigetti': 'AWS_Rigetti',
+    }
+    backend_name = backend_labels[args.backend]
 
     print(f"Double-Slit Experiment (H-P-H-M)")
     print(f"  Backend: {backend_name}")
     print(f"  Screen: {screen_pts} positions")
     print(f"  Fringes: {num_fringes} periods")
     print(f"  Shots/position: {shots_per_pos}")
-    print(f"  Total shots: {screen_pts * shots_per_pos:,}")
+    print(f"  Runs: {num_runs}")
+    print(f"  Total shots per run: {screen_pts * shots_per_pos:,}")
     print(f"  Envelope: sinc^2 (d/w = {slit_ratio})")
     print()
 
     # Save circuit diagram
     save_circuit_diagram(num_fringes)
 
-    # Build circuits
+    # Build circuits (same for all runs)
     print("Building circuits...")
     circuits, phi_vals = build_circuits(screen_pts, num_fringes)
     print(f"  {len(circuits)} circuits built")
 
-    # Execute
-    print("Executing...")
-    if args.backend == 'local':
-        counts_list = run_local(circuits, shots_per_pos)
-    else:
-        counts_list = run_ibm(circuits, shots_per_pos)
+    for run_idx in range(1, num_runs + 1):
+        print(f"\n{'='*60}")
+        print(f"  RUN {run_idx}/{num_runs}")
+        print(f"{'='*60}")
 
-    # Build histogram (count of outcome=0 at each position)
-    histogram_raw, total_shots = counts_to_histogram(counts_list, screen_pts)
-    print(f"  Total shots executed: {total_shots:,}")
+        # Execute
+        print("Executing...")
+        if args.backend == 'local':
+            counts_list = run_local(circuits, shots_per_pos)
+        elif args.backend == 'ibm':
+            counts_list = run_ibm(circuits, shots_per_pos)
+        elif args.backend == 'aws_ionq':
+            counts_list = run_aws(circuits, shots_per_pos, device='ionq')
+        elif args.backend == 'aws_rigetti':
+            counts_list = run_aws(circuits, shots_per_pos, device='rigetti')
+        else:
+            print(f"ERROR: Backend '{args.backend}' not yet implemented.")
+            raise SystemExit(1)
 
-    # Apply envelope
-    histogram = apply_envelope(histogram_raw, screen_pts, slit_ratio)
+        # Build histogram (count of outcome=0 at each position)
+        histogram_raw, total_shots = counts_to_histogram(counts_list, screen_pts)
+        print(f"  Total shots executed: {total_shots:,}")
 
-    # Theory
-    theory = theoretical_pattern(screen_pts, num_fringes, slit_ratio, shots_per_pos)
+        # Apply envelope
+        histogram = apply_envelope(histogram_raw, screen_pts, slit_ratio)
 
-    # Diagnostics
-    print(f"  Histogram max: {histogram.max():.0f}, min: {histogram.min():.0f}")
+        # Theory
+        theory = theoretical_pattern(screen_pts, num_fringes, slit_ratio, shots_per_pos)
 
-    # Save results for later playback
-    results_data = {
-        'screen_pts': screen_pts,
-        'num_fringes': num_fringes,
-        'shots_per_pos': shots_per_pos,
-        'slit_ratio': slit_ratio,
-        'backend': backend_name,
-        'phi_vals': phi_vals.tolist(),
-        'histogram_raw': histogram_raw.tolist(),
-        'histogram_enveloped': histogram.tolist(),
-    }
-    with open('double_slit_results.json', 'w') as f:
-        json.dump(results_data, f, indent=2)
-    print("Saved: double_slit_results.json")
+        # Diagnostics
+        print(f"  Histogram max: {histogram.max():.0f}, min: {histogram.min():.0f}")
 
-    # Plot
-    save_static_plot(histogram, theory, screen_pts, shots_per_pos, num_fringes,
-                     slit_ratio, backend_name)
+        # Save results with platform-encoded filename
+        results_data = {
+            'screen_pts': screen_pts,
+            'num_fringes': num_fringes,
+            'shots_per_pos': shots_per_pos,
+            'slit_ratio': slit_ratio,
+            'backend': backend_name,
+            'run': run_idx,
+            'phi_vals': phi_vals.tolist(),
+            'histogram_raw': histogram_raw.tolist(),
+            'histogram_enveloped': histogram.tolist(),
+        }
+        json_file = f'dse_results_{args.backend}_run{run_idx}.json'
+        with open(json_file, 'w') as f:
+            json.dump(results_data, f, indent=2)
+        print(f"  Saved: {json_file}")
 
-    # Animation
-    if args.animate:
-        save_animation(histogram, theory, screen_pts, shots_per_pos, num_fringes)
+        # Plot with platform-encoded filename
+        fig, ax = plt.subplots(figsize=(12, 5))
+        ax.bar(range(screen_pts), histogram, color='red', edgecolor='none',
+               alpha=0.85, width=1.0, label=f'Quantum ({backend_name})')
+        ax.plot(range(screen_pts), theory, 'b-', linewidth=1.5, alpha=0.8,
+                label='Theory: $\\cos^2(\\phi/2) \\cdot \\mathrm{sinc}^2$')
+        ax.set_xlabel('Screen position', fontsize=12)
+        ax.set_ylabel('Counts (outcome = 0)', fontsize=12)
+        ax.set_title(f'Double-Slit Interference — {backend_name} — Run {run_idx}\n'
+                     f'{screen_pts} positions, {shots_per_pos} shots/pos, '
+                     f'{num_fringes} fringes, d/w={slit_ratio}', fontsize=13)
+        ax.set_xlim(-0.5, screen_pts - 0.5)
+        ax.legend(fontsize=11)
+        plt.tight_layout()
+        plot_file = f'dse_histogram_{args.backend}_run{run_idx}.png'
+        plt.savefig(plot_file, dpi=150)
+        print(f"  Saved: {plot_file}")
+        plt.close(fig)
+
+        # Animation (only on first run if requested)
+        if args.animate and run_idx == 1:
+            save_animation(histogram, theory, screen_pts, shots_per_pos, num_fringes)
+
+    print(f"\nAll {num_runs} runs complete.")

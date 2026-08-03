@@ -6,9 +6,11 @@
 outside the event horizon. Is there a distribution of pair particle types? Or are they all
 electron-positron?
 
+
 **B:** Hawking radiation isn't limited to electron-positron pairs. The virtual pair production
 near the event horizon spans all particle types, weighted by their properties. The black hole
-radiates like a thermal blackbody at the Hawking temperature T = ħc³ / (8πGMk_B).
+radiates like a thermal blackbody at the Hawking temperature $T = \hbar c^3 / (8 \pi G M k_B)$.
+
 
 What determines the mix:
 
@@ -275,6 +277,95 @@ conclusively detected.
 
 So the final explosion of a mountain-mass black hole is enormously powerful by human standards
 but negligible by astrophysical standards — a firecracker compared to a supernova.
+
+---
+
+## Visibility, Danger, and Sunshine in a Bottle
+
+
+### At what mass does a black hole glow in visible light?
+
+Setting the Hawking temperature equal to the Sun's surface (~5300 K, peak in yellow-green
+at 550 nm via Wien's law): $M \approx 2.3 \times 10^{19}$ kg — about 4 times the mass of
+Mount Everest, or a small asteroid. The event horizon is ~30 nm across.
+
+Luminosity at this mass: ~70 nanowatts. At 1 meter this is at the threshold of human
+dark-adapted vision — an incredibly faint warm-white point. A candle flame is billions of
+times brighter.
+
+Lifetime: $\sim 10^{27}$ years (a trillion times the age of the universe). It is
+effectively permanent.
+
+
+### Can you stand next to the 4x-Everest black hole?
+
+No. At 1 meter, gravitational acceleration is $g \approx 1.5 \times 10^9$ m/s$^2$ — 150
+million g. Tidal forces at that distance would spaghettify a human body instantly. To
+experience only 1 g of pull you must be ~12 km away, where the Hawking glow is completely
+undetectable.
+
+Despite being 30 nm in size, this object gravitationally dominates everything within
+kilometers. It is not a harmless glowing dot.
+
+
+### The century-lifetime black hole: mass of a 747
+
+Solving the evaporation formula for a remaining lifetime of 100 years:
+$M \approx 2.3 \times 10^5$ kg (230 tonnes, roughly a loaded commercial aircraft).
+
+Properties:
+- Temperature: $\sim 5 \times 10^{17}$ K (100 billion times the solar core)
+- Peak emission: gamma radiation ($\lambda \sim 10^{-20}$ m)
+- Luminosity: ~70 megawatts (a small power plant)
+- Event horizon: $\sim 3 \times 10^{-22}$ m (smaller than a proton)
+- Gravitational pull at 1 m: ~0.015 m/s$^2$ (negligible — no danger of falling in)
+
+Radiation danger: Catastrophic. At 1 meter the flux is ~5.6 MW/m$^2$, overwhelmingly
+gamma rays. A lethal whole-body dose would be delivered in microseconds. Additionally the
+Hawking spectrum at this temperature includes electron-positron pairs and possibly heavier
+particles at extreme energies.
+
+Gravitationally safe; radiatively lethal.
+
+
+### Sunshine in a bottle: containing a century black hole
+
+Enclose the black hole in a spherical shell that absorbs all gamma radiation and
+re-radiates thermally. By Stefan-Boltzmann, the shell reaches thermal equilibrium at a
+temperature determined by its radius:
+
+| Shell radius | Equilibrium temperature | Appearance |
+|-------------|------------------------|------------|
+| 2 m | ~5800 K | Sun-like (white-hot) |
+| 20 m | ~1800 K | Cherry-red glow |
+| 100 m | ~600 K | Warm to the touch, dull IR |
+
+A 4-meter-diameter shell at 5800 K would look and radiate exactly like a miniature sun:
+same color, same spectrum, 70 MW total output. At 50 meters it would feel like standing in
+sunlight.
+
+The engineering problem: no known material survives at 5800 K. Options ranging from
+plausible to magical:
+
+- **Large shell (~200 m radius):** Equilibrium ~600 K. Survivable with high-temperature
+  ceramics. Glows in infrared only — not visually sun-like but thermally useful.
+- **Actively cooled shell:** Extract 70 MW as heat via coolant loops. This is a nuclear
+  reactor design with a sub-protonic "fuel rod." No material temperature limit because
+  heat is continuously removed.
+- **Magic material (4 m shell at 5800 K):** The science fiction option. A perfect
+  miniature sun lasting exactly 100 years.
+
+In all cases: the shell thermalizes the gamma radiation. No filtering or wavelength
+conversion is possible without heating. Thermodynamics requires the absorbed energy to
+re-emerge as blackbody radiation from the shell surface.
+
+
+### The finale
+
+Regardless of containment, the last ~0.1 seconds of the black hole's life release the
+remaining rest-mass energy ($\sim$ few thousand kg $\times c^2 \approx 10^{20}$ J). This
+is comparable to a large thermonuclear weapon. The micro-sun ends as a violent explosion
+that no shell survives. The "self-destruct in a century" feature is not gentle.
 
 ---
 

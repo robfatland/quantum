@@ -18,18 +18,57 @@ IBM's roadmap targets quantum advantage by end of 2026 and fault-tolerant quantu
 by 2029. See the [IBM Quantum documentation](https://docs.quantum.ibm.com/) for full details.
 
 
+### Cost context for the DSE experiment
+
+IBM charges by QPU time (~$1.60/second on Pay-As-You-Go). Our DSE circuit is H-P-H on a
+single qubit: 3 gates, each taking ~20-50 ns. A full experiment of 200 screen positions
+at 2000 shots each (400,000 circuit executions) consumes only a few seconds of QPU time,
+costing roughly **$5-10 per run**. Four runs cost under $50 total.
+
+This makes IBM by far the cheapest real-hardware option among the cloud quantum providers
+available in 2026. IonQ charges $0.08/shot ($32,000 for the same experiment). Rigetti on
+AWS is ~$200. Quantinuum on Azure is $1,000+. IBM's time-based pricing strongly favors
+short, shallow circuits run at high shot counts — exactly what the DSE requires.
+
+The topic of quantum hardware pricing involves considerable finesse (error mitigation costs,
+queue priority, session overhead, transpilation depth affecting wall-clock time, etc.) that
+is out of scope here. The key point: for single-qubit or few-qubit circuits with many shots,
+IBM is the most cost-effective option by one to three orders of magnitude.
+
+
 ## Getting Started
 
 1. Create an account at [IBM Quantum Platform](https://quantum.cloud.ibm.com/).
 2. The **Open Plan** (free) gives you up to 10 minutes of QPU time per 28-day rolling window.
 3. Install the SDK locally: `pip install qiskit qiskit-ibm-runtime`
 4. Retrieve your API token from the platform dashboard.
-5. Connect and run:
+5. Save credentials (one-time setup):
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
-service = QiskitRuntimeService(channel="ibm_quantum", token="YOUR_TOKEN")
+
+QiskitRuntimeService.save_account(
+    channel="ibm_cloud",        # or "ibm_quantum" for legacy platform
+    token="YOUR_API_KEY",
+    instance="YOUR_CRN",        # CRN for ibm_cloud; hub/group/project for ibm_quantum
+    overwrite=True,
+    set_as_default=True
+)
 ```
+
+This stores credentials in `~/.qiskit/qiskit-ibm.json` — **external to this repo**.
+The token is never committed to version control. Subsequent connections require no
+arguments:
+
+```python
+from qiskit_ibm_runtime import QiskitRuntimeService
+service = QiskitRuntimeService()  # picks up saved default
+```
+
+> **Security note:** Never place API tokens in source files or commit them to git.
+> The `save_account()` call writes to your home directory, outside the repository.
+> If credentials are accidentally exposed, rotate the API key immediately in the
+> IBM Cloud console (IAM $\to$ API keys) or the quantum.ibm.com dashboard.
 
 
 ## Key Concepts
