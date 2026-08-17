@@ -245,12 +245,7 @@ Check question: In scenario **A** above, suppose we measure in the X-basis inste
 Pure state, interference possible: $\rho^2 = \rho$ and $\rho$ may or may not have off-diagonals depending on basis. Mixed state: $\rho^2 \neq \rho$ (always); also may or may not have off-diagonals. 
 
 
-The off-diagonals tell you about coherence in the basis you chose to write the matrix. A pure state written in its own eigenbasis has no off-diagonals, for example $|0\rangle\langle 0| = $
-
-```
-1   0
-0   0
-```
+The off-diagonals tell you about coherence in the basis you chose to write the matrix. A pure state written in its own eigenbasis has no off-diagonals, for example $|0\rangle\langle 0| = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$ --- pure, no off-diagonals.
 
 
 ### Anticipating partial coherence
