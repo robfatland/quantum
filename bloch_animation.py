@@ -415,14 +415,14 @@ anim = FuncAnimation(fig, update, frames=total_frames, interval=100, blit=False)
 
 try:
     writer = FFMpegWriter(fps=10, metadata={'title': 'Bloch Sphere + Circuit'})
-    anim.save('bloch_animation.mp4', writer=writer)
-    print("\nSaved: bloch_animation.mp4")
+    anim.save('media/bloch_animation.mp4', writer=writer)
+    print("\nSaved: media/bloch_animation.mp4")
 except Exception as e:
     print(f"\nmp4 failed ({e}). Trying gif...")
     try:
         writer = PillowWriter(fps=10)
-        anim.save('bloch_animation.gif', writer=writer)
-        print("Saved: bloch_animation.gif")
+        anim.save('media/bloch_animation.gif', writer=writer)
+        print("Saved: media/bloch_animation.gif")
     except Exception as e2:
         print(f"gif also failed ({e2}).")
         print("Install ffmpeg: sudo apt install ffmpeg")

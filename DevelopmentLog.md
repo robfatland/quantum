@@ -3,6 +3,17 @@
 Entries here document steps taken so that work in this repo is reproducible.
 
 
+## Important commands (easy to forget)
+
+Reference list of commands that are needed occasionally and easy to forget.
+
+- **Open the slide deck in a browser** (run from WSL `~/quantum`):
+  ```bash
+  explorer.exe slides.html
+  ```
+  Launches the Windows default browser on the generated `slides.html` via the WSL interop shim.
+
+
 ## 2026-06-26
 
 ### Install Qiskit and Aer simulator
@@ -64,3 +75,65 @@ debugging.
 - `double_slit.py` — Real H-P-H-M circuits with measurement statistics; supports
   `--backend local` (AerSimulator) and `--backend ibm` (IBM hardware via SamplerV2)
 - Both apply sinc^2 envelope post hoc for finite slit width
+
+
+## 2026-10-14
+
+### Confirm Amazon Braket SDK is installed (argosy conda env)
+
+The AWS quantum SDK is the Amazon Braket SDK (distribution `amazon-braket-sdk`,
+import package `braket`), not Qiskit. Checked it is present in the `argosy`
+miniconda env on WSL.
+
+Note: the top-level `braket` namespace package has no `__version__` attribute,
+so query the distribution metadata instead:
+
+```bash
+python -c "from importlib.metadata import version; print(version('amazon-braket-sdk'))"
+# -> 1.124.0
+```
+
+Smoke test that the SDK imports and builds a circuit:
+
+```bash
+python -c "from braket.circuits import Circuit; print(Circuit().h(0))"
+```
+
+If it were missing, install with:
+
+```bash
+pip install amazon-braket-sdk
+```
+
+Context: environment already had Qiskit + Aer (see 2026-06-26). Braket enables
+the AWS path (hardware-agnostic: IonQ, Rigetti, IQM, and the local/SV1
+simulators), complementing the IBM/Qiskit path.
+
+
+### Cross-validate H-P-H DSE point: Qiskit vs Braket
+
+Extended `dse_one_point.py` to run the single-point double-slit circuit on both
+SDKs and compare. Braket runs on its LOCAL simulator (no AWS account, no cloud
+spend).
+
+Gate note: Braket has no `P(phi)` gate, so the Braket circuit uses `Rz(phi)`.
+`Rz` and `P` differ only by a global phase (unobservable), so measurement
+probabilities are identical.
+
+Run:
+
+```bash
+python ~/quantum/dse_one_point.py
+```
+
+Result (theta = 3 deg, d = 3 um, lambda = 650 nm, fringe order m = 0.2416,
+phi = 1.5177 rad):
+
+- Qiskit exact P(0) = 0.526532
+- Braket exact P(0) = 0.526532
+- |difference| = 2.22e-16  (machine epsilon) -> MATCH
+
+Shot runs (N = 10000) differ only by independent RNG: Qiskit 5281/4719
+(chi^2 = 0.099), Braket 5227/4773 (chi^2 = 0.589); both consistent with the
+Born-rule expectation 5265.3/4734.7. Confirms the two SDKs agree on the DSE
+H-P-H algorithm and that the Rz/P substitution is harmless.

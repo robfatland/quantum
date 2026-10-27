@@ -2,7 +2,7 @@ If the user appends the letters 'sa' after a question mark, provide a short answ
 
 Entries in DevelopmentLog.md should document steps for reproducibility: commands, versions, and context sufficient for someone to replicate the work from scratch.
 
-When the user asks a purely interpretational, comprehension, or theoretical question about quantum mechanics, append the response to the end of ~/quantum/Q2.md in readable markdown format (proper headings, LaTeX in $$ blocks, etc.).
+When the user asks a purely interpretational, comprehension, or theoretical question about quantum mechanics, append the response to the end of ~/quantum/Q2.md in readable markdown format (proper headings, LaTeX in $$ blocks, etc.), provided the concept is not already present in the document (so as to try and avoid redundancy). If the concept is already covered, say so and point to the existing section rather than appending a duplicate.
 
 When writing markdown that will be converted to PDF via pandoc + xelatex with Latin Modern fonts, never use bare Unicode Greek letters, math symbols, or special characters (α, β, γ, δ, η, θ, φ, ν, π, ∼, ⟩, ✓, ✗, →, etc.) outside of math delimiters. All such characters must appear inside $...$ or $$...$$ so LaTeX renders them natively. Use LaTeX equivalents:
 - Greek: $\alpha$, $\beta$, $\gamma$, $\delta$, $\eta$, $\theta$, $\varphi$, $\nu$, $\pi$

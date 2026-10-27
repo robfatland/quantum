@@ -68,5 +68,5 @@ lines2, labels2 = ax2.get_legend_handles_labels()
 ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper right', fontsize=11)
 
 plt.tight_layout()
-plt.savefig('colatitude_vs_phi.png', dpi=150)
-print("Saved: colatitude_vs_phi.png")
+plt.savefig('images/colatitude_vs_phi.png', dpi=150)
+print("Saved: images/colatitude_vs_phi.png")

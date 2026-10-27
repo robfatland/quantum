@@ -41,8 +41,10 @@ def discover_result_files():
     """Find all result JSON files, grouped by backend."""
     backends = {}
 
+    results_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dse_results')
+
     # New naming: dse_results_{backend}_run{N}.json
-    for f in sorted(glob.glob('dse_results_*_run*.json')):
+    for f in sorted(glob.glob(os.path.join(results_dir, 'dse_results_*_run*.json'))):
         basename = os.path.basename(f)
         # Parse: dse_results_{backend}_run{N}.json
         parts = basename.replace('dse_results_', '').replace('.json', '')
@@ -55,7 +57,7 @@ def discover_result_files():
         backends.setdefault(backend, []).append(f)
 
     # Legacy naming: double_slit_results_{backend}.json
-    for f in sorted(glob.glob('double_slit_results_*.json')):
+    for f in sorted(glob.glob(os.path.join(results_dir, 'double_slit_results_*.json'))):
         basename = os.path.basename(f)
         backend = basename.replace('double_slit_results_', '').replace('.json', '')
         backends.setdefault(backend + '_legacy', []).append(f)
@@ -144,8 +146,8 @@ def main():
     plt.suptitle(r'Per-bin $\chi^2$ contributions by backend (overlaid runs)',
                  fontsize=14, y=0.995)
     plt.tight_layout()
-    plt.savefig('chi2_per_bin.png', dpi=150)
-    print(f"Saved: chi2_per_bin.png")
+    plt.savefig('images/chi2_per_bin.png', dpi=150)
+    print(f"Saved: images/chi2_per_bin.png")
 
     # Print summary
     print("\nSummary:")

@@ -101,8 +101,8 @@ def save_circuit_diagram():
     
     try:
         fig = qc.draw('mpl', style={'name': 'iqp'})
-        fig.savefig('double_slit_circuit.png', dpi=150, bbox_inches='tight')
-        print("Saved: double_slit_circuit.png")
+        fig.savefig('images/double_slit_circuit.png', dpi=150, bbox_inches='tight')
+        print("Saved: images/double_slit_circuit.png")
         plt.close(fig)
     except Exception as e:
         print(f"Circuit diagram: {e}")
@@ -132,8 +132,8 @@ def save_static_plot(histogram, prob_dist, screen_points, num_photons, num_fring
     ax.set_xlim(-0.5, screen_points - 0.5)
     ax.legend(fontsize=11)
     plt.tight_layout()
-    plt.savefig('double_slit_histogram.png', dpi=150)
-    print("Saved: double_slit_histogram.png")
+    plt.savefig('images/double_slit_histogram.png', dpi=150)
+    print("Saved: images/double_slit_histogram.png")
     plt.close(fig)
 
 
@@ -200,15 +200,15 @@ def save_animation(histogram, prob_dist, screen_points, num_photons, num_fringes
     anim = FuncAnimation(fig, update, frames=total_frames, interval=1000 // fps,
                          blit=False, repeat=False)
     try:
-        anim.save('double_slit_accumulate.mp4', writer=FFMpegWriter(fps=fps),
+        anim.save('media/double_slit_accumulate.mp4', writer=FFMpegWriter(fps=fps),
                   progress_callback=progress)
-        print("\n\nSaved: double_slit_accumulate.mp4")
+        print("\n\nSaved: media/double_slit_accumulate.mp4")
     except Exception as e:
         print(f"\n\nmp4 failed ({e}), trying gif...")
         try:
-            anim.save('double_slit_accumulate.gif', writer=PillowWriter(fps=fps),
+            anim.save('media/double_slit_accumulate.gif', writer=PillowWriter(fps=fps),
                       progress_callback=progress)
-            print("\n\nSaved: double_slit_accumulate.gif")
+            print("\n\nSaved: media/double_slit_accumulate.gif")
         except Exception as e2:
             print(f"\n\ngif failed ({e2})")
     plt.close(fig)

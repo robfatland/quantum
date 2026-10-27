@@ -1,6 +1,21 @@
 # QA a catch-all or appendix
 
 
+## Table of contents
+
+- [PDF generation](#pdf-generation)
+- [Bookkeeping](#bookkeeping)
+- [The stack](#the-stack)
+- [The parallelogram law: geometric interpretation](#the-parallelogram-law-geometric-interpretation)
+    - [The statement](#the-statement)
+    - [The geometry](#the-geometry)
+    - [Why it matters for Hilbert spaces](#why-it-matters-for-hilbert-spaces)
+- [Density matrix and entanglement](#density-matrix-and-entanglement)
+    - [Parenthetical: The arbitrary basis u, v](#parenthetical-the-arbitrary-basis-u-v)
+    - [Resuming: Scenario B](#resuming-scenario-b)
+    - [Anticipating partial coherence](#anticipating-partial-coherence)
+
+
 ## PDF generation
 
 Full document (all Q files):

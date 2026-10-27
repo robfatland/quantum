@@ -1,5 +1,11 @@
 # Open Topics
 
+## Documentation
+
+- **Explore Superstaq / Infleqtion** — neutral-atom QC stack. Intel captured in `infleqtion/README.md`. Hardware access is bespoke; to be discussed with Infleqtion directly at an upcoming conference. Next step: try `pip install qiskit-superstaq` and run the double-slit / Bell circuits through the Superstaq compiler path.
+- **Review rewritten Q2.md** (consolidated 2026-10-16; original preserved at `Q2.md.bak`). Confirm no content was lost, the narrative flows, and it still compiles clean via pandoc + xelatex. Delete `Q2.md.bak` once satisfied.
+- To understand: Information is stored in correlations
+
 ## Alternative PEARC Demo Experiments (parked)
 
 - **Bell/CHSH test with polarizers:** Prepare Bell states, measure in rotated bases, show CHSH violation ($S > 2$). Laser + polarizers on tabletop. If time permits, revisit as second demo.

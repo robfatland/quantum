@@ -139,18 +139,20 @@ def build_gate_sequence(phi):
 
 # --- Timing ---
 fps = 15
+# All "hold" pauses are set to 0.5 s each; motion segments (intro, rotation,
+# measurement, camera moves) are left as-is.
 frames_per_gate_intro = 20
 frames_per_rotation = 40
-frames_per_gate_hold = 15
+frames_per_gate_hold = int(0.5 * fps)
 frames_per_measurement = 40
-frames_hold_after_run = int(3 * fps)
+frames_hold_after_run = int(0.5 * fps)
 frames_return_camera = int(1.5 * fps)
 frames_loop_return = int(4 * fps)  # Pan back to start for seamless loop
 
 # Post-H2 camera sequence
-frames_h2_hold = int(2 * fps)
+frames_h2_hold = int(0.5 * fps)
 frames_h2_tilt_down = int(2.5 * fps)
-frames_equator_hold = int(2 * fps)
+frames_equator_hold = int(0.5 * fps)
 
 frames_per_gate = frames_per_gate_intro + frames_per_rotation + frames_per_gate_hold
 frames_per_run = (3 * frames_per_gate + frames_h2_hold + frames_h2_tilt_down
@@ -587,14 +589,14 @@ anim = FuncAnimation(fig, update, frames=total_frames, interval=1000//fps, blit=
 
 try:
     writer = FFMpegWriter(fps=fps, metadata={'title': 'Bloch DSE H-P-H-M'})
-    anim.save('bloch_dse_animation.mp4', writer=writer)
-    print("\nSaved: bloch_dse_animation.mp4")
+    anim.save('media/bloch_dse_animation.mp4', writer=writer)
+    print("\nSaved: media/bloch_dse_animation.mp4")
 except Exception as e:
     print(f"\nmp4 failed ({e}). Trying gif...")
     try:
         writer = PillowWriter(fps=fps)
-        anim.save('bloch_dse_animation.gif', writer=writer)
-        print("Saved: bloch_dse_animation.gif")
+        anim.save('media/bloch_dse_animation.gif', writer=writer)
+        print("Saved: media/bloch_dse_animation.gif")
     except Exception as e2:
         print(f"gif also failed ({e2}).")
         print("Install ffmpeg: sudo apt install ffmpeg")

@@ -14,3 +14,7 @@ Thumbs.db
 
 # Environment
 .env
+slides.html
+slides_narration.pdf
+.agents/
+_*.py

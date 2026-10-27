@@ -18,7 +18,7 @@ phase $\to$ interfere. Each value of $\phi$ corresponds to one screen position. 
 $\phi$ across the range $[-\pi N_f,\; \pi N_f]$ (where $N_f$ is the number of fringe
 periods) reproduces the full fringe pattern.
 
-![H-P-H circuit](double_slit_circuit.png)
+![H-P-H circuit](images/double_slit_circuit.png)
 
 
 ## Post hoc $\text{sinc}^2$ envelope
@@ -28,7 +28,7 @@ slits have finite width $w$, which imposes a $\text{sinc}^2(\pi w x / \lambda L)
 diffraction envelope. This is applied as a multiplicative post-processing step on the
 histogram, parameterized by the slit-width-to-separation ratio $d/w$.
 
-![Static histogram with theory overlay](double_slit_histogram.png)
+![Static histogram with theory overlay](images/double_slit_histogram.png)
 
 
 ## Three execution tiers

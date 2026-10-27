@@ -33,6 +33,7 @@ matplotlib.use('Agg')
 
 import argparse
 import json
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, FFMpegWriter, PillowWriter
@@ -82,8 +83,8 @@ def save_circuit_diagram(num_fringes):
     
     try:
         fig = qc.draw('mpl')
-        fig.savefig('double_slit_circuit.png', dpi=150, bbox_inches='tight')
-        print("Saved: double_slit_circuit.png")
+        fig.savefig('images/double_slit_circuit.png', dpi=150, bbox_inches='tight')
+        print("Saved: images/double_slit_circuit.png")
         plt.close(fig)
     except Exception as e:
         print(f"Circuit diagram: {e}")
@@ -321,8 +322,8 @@ def save_static_plot(histogram, theory, screen_points, shots_per_pos, num_fringe
     ax.set_xlim(-0.5, screen_points - 0.5)
     ax.legend(fontsize=11)
     plt.tight_layout()
-    plt.savefig('double_slit_histogram.png', dpi=150)
-    print("Saved: double_slit_histogram.png")
+    plt.savefig('images/double_slit_histogram.png', dpi=150)
+    print("Saved: images/double_slit_histogram.png")
     plt.close(fig)
 
 
@@ -388,15 +389,15 @@ def save_animation(histogram, theory, screen_points, shots_per_pos, num_fringes)
     anim = FuncAnimation(fig, update, frames=total_frames, interval=1000 // fps,
                          blit=False, repeat=False)
     try:
-        anim.save('double_slit_accumulate.mp4', writer=FFMpegWriter(fps=fps),
+        anim.save('media/double_slit_accumulate.mp4', writer=FFMpegWriter(fps=fps),
                   progress_callback=progress)
-        print("\n\nSaved: double_slit_accumulate.mp4")
+        print("\n\nSaved: media/double_slit_accumulate.mp4")
     except Exception as e:
         print(f"\n\nmp4 failed ({e}), trying gif...")
         try:
-            anim.save('double_slit_accumulate.gif', writer=PillowWriter(fps=fps),
+            anim.save('media/double_slit_accumulate.gif', writer=PillowWriter(fps=fps),
                       progress_callback=progress)
-            print("\n\nSaved: double_slit_accumulate.gif")
+            print("\n\nSaved: media/double_slit_accumulate.gif")
         except Exception as e2:
             print(f"\n\ngif failed ({e2})")
     plt.close(fig)
@@ -501,7 +502,9 @@ if __name__ == "__main__":
             'histogram_raw': histogram_raw.tolist(),
             'histogram_enveloped': histogram.tolist(),
         }
-        json_file = f'dse_results_{args.backend}_run{run_idx}.json'
+        results_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dse_results')
+        os.makedirs(results_dir, exist_ok=True)
+        json_file = os.path.join(results_dir, f'dse_results_{args.backend}_run{run_idx}.json')
         with open(json_file, 'w') as f:
             json.dump(results_data, f, indent=2)
         print(f"  Saved: {json_file}")
@@ -520,7 +523,7 @@ if __name__ == "__main__":
         ax.set_xlim(-0.5, screen_pts - 0.5)
         ax.legend(fontsize=11)
         plt.tight_layout()
-        plot_file = f'dse_histogram_{args.backend}_run{run_idx}.png'
+        plot_file = f'images/dse_histogram_{args.backend}_run{run_idx}.png'
         plt.savefig(plot_file, dpi=150)
         print(f"  Saved: {plot_file}")
         plt.close(fig)
